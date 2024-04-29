@@ -1,0 +1,23 @@
+
+
+1-format data script
+Make tidy data frame for both the rain and temp data
+
+ - maybe using lubridate
+ https://r4ds.had.co.nz/dates-and-times.html#from-individual-components
+ using make_datetime()?
+ 
+ and save this data as .csv
+ 
+ 
+ 
+ 2-make plots script
+ 
+ Can we do a date.time on x and temp or rain on y - then facet by year?
+ 
+ 
+ Can we do a ggridge plot? to make it look really neat!
+ - try with 1st Jan in the centre of the plat?
+ see examples - ideas for ggridge plot - https://docs.google.com/presentation/d/1yK8kI4VtZThZ5NLymJpHNTgrMBavqCIT_i9ZxaYOqrs/edit?usp=sharing
+ 
+ What look likethe best plot? - how can we make ti more impressive
