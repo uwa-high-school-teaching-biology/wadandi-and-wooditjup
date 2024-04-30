@@ -19,6 +19,10 @@ dat <- read.csv("data/tidy/wandering_rainfall-temp.csv") %>%
                                    month %in% c("Oct", "Nov") ~ "Kambarang")) %>%
   glimpse()
 
+
+
+
+
 ggplot() +
   geom_col(data = dat, aes(x = year, y = rainfall)) +
   # scale_x_continuous(trans = "reverse") +
@@ -56,8 +60,19 @@ ggplot() +
   scale_y_continuous(trans = "reverse") +
   theme_classic()
 
+ggplot() +
+  geom_ridgeline(data = dat, aes(x = month, y = year, 
+                                 group = year, height = rainfall),
+                 scale = 0.2) +
+  scale_y_continuous(trans = "reverse") +
+  theme_classic()
+
+
 test <- dat %>%
   dplyr::filter(year > 1990)
+
+
+
 
 ggplot() +
   geom_ridgeline(data = test, aes(x = month, y = year, 
