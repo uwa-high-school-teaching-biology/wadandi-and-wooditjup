@@ -8,12 +8,9 @@
 
 # Load libraries
 library(tidyverse)
-
 library(devtools)
-devtools::install_github("GlobalArchiveManual/CheckEM")
-library(CheckEM) #does not work for tim!
-
-
+# devtools::install_github("GlobalArchiveManual/CheckEM")
+library(CheckEM)
 
 rain <- read.csv("data/raw/composite rain for Wandering.csv") %>%
   clean_names() %>%
@@ -28,17 +25,15 @@ rain <- read.csv("data/raw/composite rain for Wandering.csv") %>%
   glimpse()
 
 
-#if we make rain.day - we can use for a ggridge - just for makaru
-rain.day <- read.csv("data/raw/composite rain for Wandering.csv") %>%
+# if we make rain.day - we can use for a ggridge - just for makaru
+rain_day <- read.csv("data/raw/composite rain for Wandering.csv") %>%
   clean_names() %>%
   dplyr::mutate(rainfall_amount_millimetres = if_else(is.na(rainfall_amount_millimetres), 0, rainfall_amount_millimetres)) %>%
   dplyr::mutate(period_over_which_rainfall_was_measured_days = if_else(is.na(period_over_which_rainfall_was_measured_days), 1,
                                                                        period_over_which_rainfall_was_measured_days),
                 rainfall_amount_millimetres = rainfall_amount_millimetres/period_over_which_rainfall_was_measured_days) %>%
   dplyr::select(year, month, day, rainfall_amount_millimetres) %>%
-  dplyr::group_by(year, month, day) %>%
-  dplyr::summarise(rainfall = mean(rainfall_amount_millimetres)) %>%
-  ungroup() %>%
+  dplyr::rename(rainfall = rainfall_amount_millimetres) %>%
   glimpse()
 
 
@@ -55,13 +50,15 @@ temp <- read.csv("data/raw/composite temp for Wandering.csv",
                 year = as.integer(year)) %>%
   glimpse()
 
-#if we make temp.day - we can use for a ggridge - just for makaru?
-
-
+# Need to download temperature data daily if wanted to use that
 
 dat <- rain %>%
   left_join(temp) %>%
+  dplyr::filter(year > 1901) %>%
   glimpse()
 
-write.csv(dat, file = "data/tidy/wandering_rainfall-temp.csv",
+write.csv(dat, file = "data/tidy/wandering_rainfall-temp_month.csv",
+          row.names = F)
+
+write.csv(rain_day, file = "data/tidy/wandering_rainfall_day.csv",
           row.names = F)
