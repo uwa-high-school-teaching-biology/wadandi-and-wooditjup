@@ -57,8 +57,30 @@ dat <- rain %>%
   dplyr::filter(year > 1901) %>%
   glimpse()
 
+# Create mean temperature and rainfall anomaly data - move to format script!!
+anomaly_base <- dat %>%
+  dplyr::filter(between(year, 1961, 1990)) %>%
+  dplyr::group_by(month) %>%
+  dplyr::summarise(rainfall_base = mean(rainfall, na.rm = T),
+                   temperature_base = mean(temperature, na.rm = T)) %>%
+  glimpse()
+
+anomaly <- dat %>%
+  left_join(anomaly_base) %>%
+  dplyr::mutate(rain_anom = rainfall - rainfall_base,
+                temp_anom = temperature - temperature_base) %>%
+  group_by(year) %>%
+  summarise(rain_anom = mean(rain_anom, na.rm = T),
+            temp_anom = mean(temp_anom, na.rm = T)) %>%
+  dplyr::mutate(rain_dir = if_else(rain_anom < 0, "neg", "pos"),
+                temp_dir = if_else(temp_anom < 0, "neg", "pos")) %>%
+  glimpse()
+
 write.csv(dat, file = "data/tidy/wandering_rainfall-temp_month.csv",
           row.names = F)
 
 write.csv(rain_day, file = "data/tidy/wandering_rainfall_day.csv",
+          row.names = F)
+
+write.csv(anomaly, file = "data/tidy/wandering_rainfall-temp_anomaly.csv",
           row.names = F)
