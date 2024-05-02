@@ -8,7 +8,7 @@
 
 # Load libraries ----
 library(tidyverse)
-library(ggplot)
+library(ggplot2)
 
 # Load raw rainfall and temperature data ----
 dat <- read.csv("data/tidy/wandering_rainfall-temp_month.csv") %>%
@@ -75,43 +75,51 @@ ggplot(data = yearly, aes(x = year, y = rainfall)) +
 ##### RIDGELINE PLOTS - DON'T RUN ######
 
 # Load daily data for ridgeline plot
-# rainfall <- read.csv("data/tidy/wandering_rainfall_day.csv") %>%
-#   dplyr::mutate(month = lubridate::month(month, label = T)) %>%
-#   glimpse()
-# 
-# # Ridgeline plots
-# # Daily data - looks like shit
-# ggplot() +
-#   geom_ridgeline(data = filter(rainfall, between(year, 2000, 2020)), aes(x = day, y = year, 
-#                                       group = year, height = rainfall),
-#                  scale = 0.2) +
-#   scale_y_continuous(trans = "reverse") +
-#   theme_classic()
-# 
-# # Monthly data - too many years to plot the whole lot, can't see the trend
-# ggplot() +
-#   geom_ridgeline(data = filter(dat, between(year, 2000, 2020)), aes(x = month, y = year, 
-#                                  group = year, height = rainfall),
-#                  scale = 0.2) +
-#   scale_y_continuous(trans = "reverse") +
-#   theme_classic()
-# 
-# ggplot() +
-#   geom_ridgeline(data = dat, aes(x = month, y = year, 
-#                                                                     group = year, height = rainfall),
-#                  scale = 0.2) +
-#   scale_y_continuous(trans = "reverse") +
-#   theme_classic()
-# 
-# # Every 5 years - still can't really see the trend
-# test <- dat %>%
-#   dplyr::mutate(decade = if_else(str_detect(year, "0$|5$"), "yes", "no"))
-# 
-# ggplot() +
-#   geom_ridgeline(data = filter(test, decade %in% "yes"), aes(x = month, y = year, 
-#                                                                     group = year, height = rainfall),
-#                  scale = 0.5) +
-#   scale_y_continuous(trans = "reverse") +
-#   theme_classic()
-# 
-# 
+library(ggridges)
+
+rainfall <- read.csv("data/tidy/wandering_rainfall_day.csv") %>%
+  dplyr::mutate(month = lubridate::month(month, label = T)) %>%
+  glimpse()
+
+# Ridgeline plots
+# Daily data - looks like shit
+ggplot() +
+  geom_ridgeline(data = filter(rainfall, between(year, 2000, 2020)), aes(x = day, y = year,
+                                      group = year, height = rainfall),
+                 scale = 0.2) +
+  scale_y_continuous(trans = "reverse") +
+  theme_classic()
+
+ggplot() +
+  geom_density_ridges(data = filter(rainfall, between(year, 1950, 2023) & month %in% c("Jun", "Jul")), 
+                      aes(x = rainfall, y = year, group = year)) +
+  scale_x_continuous(limits = c(0, 5)) +
+  theme_classic()
+
+# Monthly data - too many years to plot the whole lot, can't see the trend
+ggplot() +
+  geom_ridgeline(data = filter(dat, between(year, 2000, 2020)), aes(x = month, y = year,
+                                 group = year, height = rainfall),
+                 scale = 0.2) +
+  scale_y_continuous(trans = "reverse") +
+  theme_classic()
+
+ggplot() +
+  geom_ridgeline(data = dat, aes(x = month, y = year,
+                                                                    group = year, height = rainfall),
+                 scale = 0.2) +
+  scale_y_continuous(trans = "reverse") +
+  theme_classic()
+
+# Every 5 years - still can't really see the trend
+test <- dat %>%
+  dplyr::mutate(decade = if_else(str_detect(year, "0$|5$"), "yes", "no"))
+
+ggplot() +
+  geom_ridgeline(data = filter(test, decade %in% "yes"), aes(x = month, y = year,
+                                                                    group = year, height = rainfall),
+                 scale = 0.5) +
+  scale_y_continuous(trans = "reverse") +
+  theme_classic()
+
+
