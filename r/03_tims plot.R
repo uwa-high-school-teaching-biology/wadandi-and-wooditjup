@@ -47,8 +47,8 @@ dat.temp <- read.csv("data/raw/swWinterMeanTemperatureAnomaly.csv") %>%
 ggplot() +
   geom_col(data = dat.temp, aes(x = Year, y = Winter.mean.temperature.anomaly, fill = tempdir),
            show.legend = F, colour = "black", linewidth = 3) +
-  scale_fill_manual(values = c("neg" = "firebrick2",
-                               "pos" = "steelblue3")) +
+  scale_fill_manual(values = c("pos" = "firebrick2",
+                               "neg" = "steelblue3")) +
   geom_smooth(data = dat.temp, aes(x = Year, y = Winter.mean.temperature.anomaly),
               method = "lm", se = F, colour = "black", linewidth = 5) +
   labs(x = "Year", y = "Mean temperature anomaly (°C)", title = "Winter mean temperature anomaly\nSouthwestern Australia (1900 to 2023)") +
