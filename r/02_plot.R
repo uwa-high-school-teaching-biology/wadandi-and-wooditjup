@@ -23,6 +23,7 @@ dat <- read.csv("data/tidy/wandering_rainfall-temp_month.csv") %>%
 
 # Make a plot of rainfall for just the Makuru season ----
 ggplot() +
+  # geom_col(data = filter(dat, season %in% "Makuru"), aes(x = year, y = rainfall)) +
   geom_col(data = filter(dat, season %in% "Makuru"), aes(x = year, y = rainfall), fill = "steelblue3") +
   labs(x = "Year", y = "Rainfall (mm)", title = "Rainfall in Makuru (June/July)") +
   theme_classic()
@@ -37,6 +38,8 @@ ggplot() +
                                "pos" = "steelblue3")) +
   labs(x = "Year", y = "Rainfall anomaly (mm)", title = "Yearly rainfall anomaly") +
   theme_classic()
+
+
 
 ## Make a plot of temperature anomaly ----
 ggplot() +
